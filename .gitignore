@@ -1,0 +1,7 @@
+*.pyc
+*.PNG
+*.log
+*.output
+*.data
+*.pth
+*.mat
