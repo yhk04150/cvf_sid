@@ -14,7 +14,7 @@ def process_image(train_noisy):
     STD_train = []
     for h in range(3,train_noisy.shape[1]-3):
         for w in range(3,train_noisy.shape[2]-3):
-            STD_train.append(np.std((train_noisy[:,h-3:h+3,w-3:w+3,:]/255).reshape([-1,36,3]),1).reshape([-1,1,3]))   
+            STD_train.append(np.std((train_noisy[:,h-3:h+3,w-3:w+3,:]/255).reshape([-1,36,1]),1).reshape([-1,1,1]))   
     return np.mean(np.concatenate(STD_train,1),1)
 
 def horizontal_flip(image, rate=0.5):
