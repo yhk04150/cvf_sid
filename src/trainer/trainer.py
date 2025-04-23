@@ -66,6 +66,7 @@ class Trainer(BaseTrainer):
            os.makedirs('../output/N_d/')
         if os.path.isdir('../output/I')==False:
            os.makedirs('../output/I/')
+        self.epoch_durations = []
 
     def _train_epoch(self, epoch):
         start_time = time.time()
@@ -138,7 +139,7 @@ class Trainer(BaseTrainer):
         log = self.train_metrics.result()
         
         if self.do_test:
-            if epoch>100 or epoch%10==0:
+            if epoch>100 or epoch%5==0:
                test_log = self._test_epoch(epoch,save=True)
                print(test_log.items())
                log.update(**{'test_' + k: v for k, v in test_log.items()})
@@ -150,8 +151,11 @@ class Trainer(BaseTrainer):
         self.writer.close()
         end_time = time.time()
         epoch_duration = end_time - start_time
+        self.epoch_durations.append(epoch_duration)
+        avg_time = sum(self.epoch_durations) / len(self.epoch_durations)
         self.logger.info(f'Train Epoch {epoch} completed in {epoch_duration:.2f} seconds')
         print(f'Train Epoch {epoch} completed in {epoch_duration:.2f} seconds')
+        print(f'Epoch {epoch} completed in {epoch_duration:.2f}s — average so far: {avg_time:.2f}s')
         return log
 
     def _test_epoch(self, epoch,save=False):
